@@ -1,5 +1,5 @@
 
-  # Modern Responsive Website
+  # Hireloom
 
   This is a code bundle for Modern Responsive Website. The original project is available at https://www.figma.com/design/xiteoJWp0UZpZgjbQ6gW6R/Modern-Responsive-Website.
 
