@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Filter, Video, Brain } from "lucide-react";
 import { fadeUp, jakarta, inter } from "./shared";
+import { StarfieldCanvas } from "../ui/starfield-hero";
 
 function RecruiterDashboardTab() {
   return (
@@ -161,8 +162,29 @@ export default function ProductShowcaseSection() {
   const ActiveComponent = tabs[active].component;
 
   return (
-    <section className="py-24 bg-[#06060F]" id="product">
-      <div className="max-w-7xl mx-auto px-5 lg:px-8">
+    <section className="relative isolate py-24 bg-[#06060F] overflow-hidden" id="product">
+      {/* Starfield background interactive canvas */}
+      <StarfieldCanvas
+        particleCount={280}
+        interactionRadius={150}
+        baseRgb={[168, 85, 247]}
+        activeRgb={[255, 255, 255]}
+        springK={0.05}
+        damping={0.85}
+        reduceMotion={false}
+      />
+
+      {/* Edge vignette overlay */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 90% 80% at 50% 50%, transparent 35%, rgba(6,6,15,0.95) 100%)",
+        }}
+      />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-5 lg:px-8">
         <motion.div {...fadeUp(0)} className="text-center max-w-xl mx-auto mb-14">
           <div
             className="text-[12.5px] font-semibold uppercase tracking-widest text-[#A855F7] mb-3"
@@ -181,9 +203,11 @@ export default function ProductShowcaseSection() {
           </p>
         </motion.div>
 
+        {/* Product showcase dashboard container - data-starfield-ignore ensures particle repulse only activates on background */}
         <motion.div
           {...fadeUp(0.1)}
-          className="rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0A14] shadow-[0_32px_80px_rgba(0,0,0,0.5)]"
+          data-starfield-ignore="true"
+          className="rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0A0A14]/90 backdrop-blur-md shadow-[0_32px_80px_rgba(0,0,0,0.6)]"
         >
           {/* Tab bar */}
           <div className="flex items-center gap-1 px-5 pt-4 pb-0 border-b border-white/[0.06]">
