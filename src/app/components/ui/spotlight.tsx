@@ -20,16 +20,19 @@ export function Spotlight({
   const [isHovered, setIsHovered] = useState(false);
   const [parentElement, setParentElement] = useState<HTMLElement | null>(null);
 
-  const mouseXRef = useMotionValue(0);
-  const mouseYRef = useMotionValue(0);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
-  const spotlightLeft = useTransform(mouseXRef, (x) => `${x - size / 2}px`);
-  const spotlightTop = useTransform(mouseYRef, (y) => `${y - size / 2}px`);
+  const springX = useSpring(mouseX, springOptions);
+  const springY = useSpring(mouseY, springOptions);
+
+  const spotlightLeft = useTransform(springX, (x) => `${x - size / 2}px`);
+  const spotlightTop = useTransform(springY, (y) => `${y - size / 2}px`);
 
   useEffect(() => {
     if (containerRef.current) {
       const parent = containerRef.current.parentElement;
-      if (parent) {
+      if (parent && parent instanceof HTMLElement) {
         parent.style.position = 'relative';
         parent.style.overflow = 'hidden';
         setParentElement(parent);
@@ -38,13 +41,13 @@ export function Spotlight({
   }, []);
 
   const handleMouseMove = useCallback(
-    (event: MouseEvent) => {
+    (event: globalThis.MouseEvent) => {
       if (!parentElement) return;
       const { left, top } = parentElement.getBoundingClientRect();
-      mouseXRef.set(event.clientX - left);
-      mouseYRef.set(event.clientY - top);
+      mouseX.set(event.clientX - left);
+      mouseY.set(event.clientY - top);
     },
-    [mouseXRef, mouseYRef, parentElement]
+    [mouseX, mouseY, parentElement]
   );
 
   useEffect(() => {
@@ -76,7 +79,7 @@ export function Spotlight({
         height: size,
         left: spotlightLeft,
         top: spotlightTop,
-        background: `radial-gradient(circle, ${color} 100%, transparent 100%)`,
+        background: `radial-gradient(circle, ${color} 0%, transparent 80%)`,
       }}
     />
   );
