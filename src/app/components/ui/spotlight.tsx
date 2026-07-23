@@ -13,15 +13,15 @@ type SpotlightProps = {
 export function Spotlight({
   className,
   size = 200,
-  springOptions = { bounce: 0 },
+  springOptions = { stiffness: 800, damping: 40, bounce: 0 },
   color = 'rgba(128, 40, 228, 1)',
 }: SpotlightProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [parentElement, setParentElement] = useState<HTMLElement | null>(null);
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+  const mouseX = useMotionValue(-size);
+  const mouseY = useMotionValue(-size);
 
   const springX = useSpring(mouseX, springOptions);
   const springY = useSpring(mouseY, springOptions);
@@ -40,31 +40,45 @@ export function Spotlight({
     }
   }, []);
 
-  const handleMouseMove = useCallback(
-    (event: globalThis.MouseEvent) => {
-      if (!parentElement) return;
-      const { left, top } = parentElement.getBoundingClientRect();
-      mouseX.set(event.clientX - left);
-      mouseY.set(event.clientY - top);
-    },
-    [mouseX, mouseY, parentElement]
-  );
-
   useEffect(() => {
     if (!parentElement) return;
 
+    let rect = parentElement.getBoundingClientRect();
+
+    const updateRect = () => {
+      if (parentElement) {
+        rect = parentElement.getBoundingClientRect();
+      }
+    };
+
+    const handleMouseEnter = () => {
+      updateRect();
+      setIsHovered(true);
+    };
+
+    const handleMouseMove = (event: globalThis.MouseEvent) => {
+      mouseX.set(event.clientX - rect.left);
+      mouseY.set(event.clientY - rect.top);
+    };
+
+    const handleMouseLeave = () => {
+      setIsHovered(false);
+    };
+
+    parentElement.addEventListener('mouseenter', handleMouseEnter);
     parentElement.addEventListener('mousemove', handleMouseMove);
-    parentElement.addEventListener('mouseenter', () => setIsHovered(true));
-    parentElement.addEventListener('mouseleave', () => setIsHovered(false));
+    parentElement.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('scroll', updateRect, { passive: true });
+    window.addEventListener('resize', updateRect, { passive: true });
 
     return () => {
+      parentElement.removeEventListener('mouseenter', handleMouseEnter);
       parentElement.removeEventListener('mousemove', handleMouseMove);
-      parentElement.removeEventListener('mouseenter', () => setIsHovered(true));
-      parentElement.removeEventListener('mouseleave', () =>
-        setIsHovered(false)
-      );
+      parentElement.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('scroll', updateRect);
+      window.removeEventListener('resize', updateRect);
     };
-  }, [parentElement, handleMouseMove]);
+  }, [parentElement, mouseX, mouseY]);
 
   return (
     <motion.div
@@ -79,7 +93,7 @@ export function Spotlight({
         height: size,
         left: spotlightLeft,
         top: spotlightTop,
-        background: `radial-gradient(circle, ${color} 0%, transparent 80%)`,
+        background: `radial-gradient(circle, ${color} 100%, transparent 100%)`,
       }}
     />
   );
