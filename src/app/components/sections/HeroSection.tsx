@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { fadeUp, jakarta, inter } from "./shared";
 import { TextMorph } from "../ui/text-morph";
+import BackgroundBoxes from "../ui/background-boxes";
 
 function DashboardMockup() {
   const candidates = [
@@ -22,7 +23,7 @@ function DashboardMockup() {
   };
 
   return (
-    <div className="relative w-full h-full rounded-2xl overflow-hidden border border-black/[0.07] bg-white flex flex-col">
+    <div className="relative w-full h-full rounded-2xl overflow-hidden border border-black/[0.07] bg-white flex flex-col pointer-events-auto">
       {/* Titlebar */}
       <div className="flex items-center gap-1.5 px-3 sm:px-4 py-2.5 sm:py-3 bg-[#F9F9FB] border-b border-black/[0.07] flex-shrink-0">
         <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#FF5F56]" />
@@ -179,7 +180,7 @@ function ContainerScroll({
 
 export default function HeroSection() {
   const titleComponent = (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center pointer-events-none [&_a]:pointer-events-auto [&_button]:pointer-events-auto font-sans">
       <motion.div {...fadeUp(0)}>
         <div
           className="inline-flex items-center gap-2 bg-[#F4F0FF] text-[#8028E4] text-[11.5px] sm:text-[12.5px] font-semibold px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full mb-4 sm:mb-6 border border-[#8028E4]/15"
@@ -250,19 +251,29 @@ export default function HeroSection() {
 
   return (
     <section className="relative overflow-hidden bg-white">
-      {/* Subtle grid background */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(128,40,228,1) 1px, transparent 1px), linear-gradient(90deg, rgba(128,40,228,1) 1px, transparent 1px)",
-          backgroundSize: "48px 48px",
-        }}
-      />
-      {/* Subtle purple radial glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-[radial-gradient(ellipse_at_top,rgba(128,40,228,0.07)_0%,transparent_70%)] pointer-events-none" />
+      {/* Interactive 3D Prism Grid Background */}
+      <div className="absolute inset-0 pointer-events-auto z-0">
+        <BackgroundBoxes
+          backgroundColor="#FFFFFF"
+          borderColor="rgba(128, 40, 228, 0.08)"
+          boxSize={48}
+          borderWidth={1}
+          colors={{
+            paletteCount: 6,
+            color1: "#8028E4",
+            color2: "#8028E4",
+            color3: "#8028E4",
+            color4: "#8028E4",
+            color5: "#8028E4",
+            color6: "#8028E4",
+          }}
+        />
+      </div>
 
-      <div className="relative pt-0">
+      {/* Subtle purple radial glow overlay */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-[radial-gradient(ellipse_at_top,rgba(128,40,228,0.08)_0%,transparent_70%)] pointer-events-none z-0" />
+
+      <div className="relative z-10 pt-0">
         <ContainerScroll titleComponent={titleComponent}>
           <DashboardMockup />
         </ContainerScroll>

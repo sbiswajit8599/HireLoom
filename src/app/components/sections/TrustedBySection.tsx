@@ -69,8 +69,11 @@ export default function TrustedBySection() {
           <LogoCloud className="max-w-6xl mx-auto border-black/[0.08] shadow-sm rounded-xl">
             {companyLogos.map((company, index) => {
               const isEven = index % 2 === 0;
-              // Only render the middle 4 plus icons (at row 1 interior dividers: index 0, 1, 2, 3)
-              const showPlusIcon = index === 0 || index === 1 || index === 2 || index === 3;
+
+              // On mobile (< md), plus icons are aligned vertically down the central divider (indices 0, 2, 4, 6).
+              // On desktop (>= md), plus icons sit at interior column intersections (indices 0, 1, 2, 3).
+              const isMobileVerticalPlus = index === 0 || index === 2 || index === 4 || index === 6;
+              const isDesktopPlus = index === 0 || index === 1 || index === 2 || index === 3;
 
               return (
                 <LogoCard
@@ -83,9 +86,20 @@ export default function TrustedBySection() {
                     alt: `${company.name} Logo`,
                   }}
                 >
-                  {showPlusIcon && (
+                  {/* Plus icon on central vertical line for mobile */}
+                  {isMobileVerticalPlus && (
                     <PlusIcon
-                      className="absolute right-0 bottom-0 translate-x-1/2 translate-y-1/2 z-10 size-5 text-[#8028E4]/100 pointer-events-none"
+                      className={`absolute right-0 bottom-0 translate-x-1/2 translate-y-1/2 z-10 size-5 text-[#8028E4] pointer-events-none ${
+                        isDesktopPlus ? "block" : "block md:hidden"
+                      }`}
+                      strokeWidth={1.5}
+                    />
+                  )}
+
+                  {/* Plus icon for remaining desktop dividers */}
+                  {!isMobileVerticalPlus && isDesktopPlus && (
+                    <PlusIcon
+                      className="absolute right-0 bottom-0 translate-x-1/2 translate-y-1/2 z-10 size-5 text-[#8028E4] pointer-events-none hidden md:block"
                       strokeWidth={1.5}
                     />
                   )}
