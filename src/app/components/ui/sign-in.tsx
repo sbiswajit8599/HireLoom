@@ -95,12 +95,35 @@ export const SignInPage: React.FC<SignInPageProps> = ({
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row-reverse font-sans bg-[#06060F] text-white w-full overflow-x-hidden relative">
-      {/* Top Left Navigation Back Arrow Only */}
-      <div className="absolute top-[50px] left-[50px] z-50">
+      {/* Mobile Top Navbar with Back Button & Brand Logo */}
+      <div className="flex md:hidden items-center justify-between px-4 py-3 border-b border-white/10 bg-[#06060F]/90 backdrop-blur-xl sticky top-0 z-50">
+        {onBackToHome ? (
+          <button
+            onClick={onBackToHome}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 border border-white/15 text-white text-xs font-semibold transition-all shadow-sm cursor-pointer"
+            aria-label="Back to home"
+            style={inter}
+          >
+            <ArrowLeft size={14} />
+            <span>Back</span>
+          </button>
+        ) : (
+          <div className="w-16" />
+        )}
+
+        <div className="scale-90 origin-center">
+          <HireloomBrandMark />
+        </div>
+
+        <div className="w-16" /> {/* Balances header symmetry */}
+      </div>
+
+      {/* Desktop Top Left Floating Back Arrow */}
+      <div className="hidden md:block absolute top-10 left-10 z-50">
         {onBackToHome && (
           <button
             onClick={onBackToHome}
-            className="size-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-all duration-200 cursor-pointer backdrop-blur-md"
+            className="size-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-105 active:scale-95 shadow-lg"
             aria-label="Back to home"
           >
             <ArrowLeft size={18} />
@@ -110,12 +133,8 @@ export const SignInPage: React.FC<SignInPageProps> = ({
 
       {/* RIGHT COLUMN: Sign-in Form */}
       <section className="flex-1 flex items-center justify-center p-6 md:p-12 lg:p-16 z-10 my-auto">
-        <div className="w-full max-w-md pt-12 md:pt-0">
+        <div className="w-full max-w-md pt-4 md:pt-0">
           <div className="flex flex-col gap-6">
-            <div className="mb-2 md:hidden">
-              <HireloomBrandMark />
-            </div>
-
             <div>
               <h1 className="text-3xl md:text-4xl font-extrabold leading-tight text-white mb-2" style={jakarta}>
                 {title}
