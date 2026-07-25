@@ -18,9 +18,9 @@ import { jakarta } from "./components/sections/shared";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-white" style={{ ...jakarta, scrollBehavior: "smooth" }}>
+    <div className="min-h-screen bg-[#06060F]" style={{ ...jakarta, scrollBehavior: "smooth" }}>
       <Nav />
-      <main>
+      <main className="relative z-10 bg-white rounded-b-[40px] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] overflow-hidden">
         <HeroSection />
         <TrustedBySection />
         <ProblemSection />

@@ -4,7 +4,7 @@ import { fadeUp, jakarta, inter } from "./shared";
 
 export default function CTASection() {
   return (
-    <section className="py-24 bg-[#8028E4] relative overflow-hidden">
+    <section className="py-24 bg-[#8028E4] relative overflow-hidden rounded-b-[40px]">
       <div className="absolute inset-0 opacity-[0.07]" style={{
         backgroundImage: "radial-gradient(circle at 30% 50%, #ffffff 0%, transparent 60%), radial-gradient(circle at 70% 50%, #ffffff 0%, transparent 60%)"
       }} />
