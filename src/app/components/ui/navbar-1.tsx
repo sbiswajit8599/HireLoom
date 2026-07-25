@@ -6,7 +6,11 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X } from "lucide-react"
 import { jakarta, inter } from "../sections/shared"
 
-const Navbar1 = () => {
+interface Navbar1Props {
+  onSignInClick?: () => void;
+}
+
+const Navbar1: React.FC<Navbar1Props> = ({ onSignInClick }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const toggleMenu = () => setIsOpen(!isOpen)
@@ -92,13 +96,13 @@ const Navbar1 = () => {
             transition={{ duration: 0.3 }}
             whileHover={{ scale: 1.05 }}
           >
-            <a
-              href="#"
-              className="text-[13.5px] font-medium text-zinc-300 hover:text-white transition-colors px-1"
+            <button
+              onClick={onSignInClick}
+              className="text-[13.5px] font-medium text-zinc-300 hover:text-white transition-colors px-1 cursor-pointer"
               style={inter}
             >
               Sign In
-            </a>
+            </button>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, x: 20 }}
@@ -165,14 +169,16 @@ const Navbar1 = () => {
               ))}
 
               <div className="pt-4 flex flex-col gap-3">
-                <a 
-                  href="#" 
-                  className="text-center text-[14px] font-medium text-zinc-300 py-2 hover:text-white" 
-                  onClick={toggleMenu}
+                <button 
+                  onClick={() => {
+                    toggleMenu();
+                    onSignInClick?.();
+                  }}
+                  className="text-center text-[14px] font-medium text-zinc-300 py-2 hover:text-white cursor-pointer" 
                   style={inter}
                 >
                   Sign In
-                </a>
+                </button>
                 <motion.a
                   href="#"
                   className="inline-flex items-center justify-center w-full px-5 py-3 text-sm font-semibold text-white bg-[#8028E4] rounded-full hover:bg-[#6B1FC8] transition-colors shadow-[0_2px_8px_rgba(128,40,228,0.28)]"

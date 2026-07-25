@@ -9,7 +9,11 @@ interface FooterLinkGroup {
   links: string[];
 }
 
-export default function Footer() {
+interface FooterProps {
+  onSignInClick?: () => void;
+}
+
+export default function Footer({ onSignInClick }: FooterProps) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
